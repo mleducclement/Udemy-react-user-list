@@ -2,56 +2,45 @@ import React, { useState } from "react";
 import "./App.css";
 
 import UserForm from "./components/UserForm/UserForm";
-import UserList from "./components/UserList/UserList";
+import UsersList from "./components/UsersList/UsersList";
 import Modal from "./components/UI/Modal";
 
-const DUMMY_USERS = [
-  {
-    id: 16423,
-    username: "Schaezar",
-    age: 35,
-  },
-  {
-    id: 258,
-    username: "Terry23562",
-    age: 42,
-  },
-  {
-    id: 9348,
-    username: "XanThePayn",
-    age: 27,
-  },
-];
-
 function App() {
-  const [userList, setUserList] = useState(DUMMY_USERS);
-  const [modalMessage, setModalMessage] = useState("");
-  const [dataIsValid, setDataIsValid] = useState(true);
+  const [usersList, setUsersList] = useState([]);
+  const [modalContent, setModalContent] = useState();
 
   const onSaveData = (user) => {
-    setUserList((prevUserList) => {
-      return [...prevUserList, user];
+    setUsersList((prevUsersList) => {
+      return [...prevUsersList, user];
+    });
+  };
+
+  const deleteItemHandler = (id) => {
+    setUsersList((prevUsersList) => {
+      const updatedUsersList = prevUsersList.filter((user) => user.id !== id);
+      return updatedUsersList;
     });
   };
 
   const closeModal = () => {
-    setDataIsValid(true);
-    setModalMessage("");
+    setModalContent(null);
   };
 
-  const onInvalidData = ({ message }) => {
-    setDataIsValid(false);
-    setModalMessage(message);
-    console.log(message);
+  const onInvalidData = ({ title, message }) => {
+    setModalContent({
+      title: title,
+      message: message,
+    });
   };
 
   return (
     <div>
-      {!dataIsValid && (
-        <Modal onModalClose={closeModal} message={modalMessage} />
+      {modalContent && (
+        <Modal onModalClose={closeModal} content={modalContent} />
       )}
       <UserForm onInvalidData={onInvalidData} onSaveData={onSaveData} />
-      <UserList userList={userList} />
+
+      <UsersList onDeleteItem={deleteItemHandler} users={usersList} />
     </div>
   );
 }

@@ -8,7 +8,7 @@ const UserForm = ({ onSaveData, onInvalidData }) => {
   const [enteredUser, setEnteredUser] = useState("");
   const [enteredAge, setEnteredAge] = useState("");
 
-  const userChangeHandler = (e) => {
+  const usernameChangeHandler = (e) => {
     setEnteredUser(e.target.value);
   };
 
@@ -19,18 +19,24 @@ const UserForm = ({ onSaveData, onInvalidData }) => {
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
-    if (enteredUser === "" || enteredAge === "") {
-      onInvalidData({ message: "Please fill all the fields" });
+    if (enteredUser.trim().length === 0 || enteredAge.trim().length === 0) {
+      onInvalidData({
+        title: "Invalid Input",
+        message: "Please enter a valid name and age (non-empty values)",
+      });
       return;
     }
 
-    if (enteredAge < 1) {
-      onInvalidData({ msg: "Age cannot be smaller than 1" });
+    if (+enteredAge < 1) {
+      onInvalidData({
+        title: "Invalid Age",
+        message: "Please enter a valid age (>0)",
+      });
       return;
     }
 
     const userData = {
-      id: Math.floor(Math.random() * 100000),
+      id: Math.floor(Math.random() * 100000).toString(),
       username: enteredUser,
       age: enteredAge,
     };
@@ -45,7 +51,7 @@ const UserForm = ({ onSaveData, onInvalidData }) => {
       <form onSubmit={onSubmitHandler}>
         <label htmlFor="username">Username</label>
         <input
-          onChange={userChangeHandler}
+          onChange={usernameChangeHandler}
           value={enteredUser}
           type="text"
           id="username"

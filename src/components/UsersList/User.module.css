@@ -1,0 +1,8 @@
+.user {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  color: white;
+  background: rgb(78, 21, 104);
+  cursor: pointer;
+  border-radius: 0 0 1.5rem 0;
+}
